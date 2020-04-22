@@ -368,7 +368,10 @@ function fire(e) {
             })
         }
         else { 
-            alert("Svaka cast!")
+            setTimeout(() => {
+                alert("Svaka cast!");
+                ;
+            }, 10)
         }
     }
     else {
