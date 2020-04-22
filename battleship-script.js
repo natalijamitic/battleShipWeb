@@ -260,3 +260,142 @@ function colorShip(e) {
         e.stopPropagation();
     }
 }
+
+
+
+/******* GAME *******/
+
+var MAX_HITS = 20;
+var hits = [0, 0];
+var first = true;
+
+function loadBoards() {
+    boards = JSON.parse(localStorage.getItem("boards"));
+
+    setName();
+
+    $(".game").css("background-color", colors[turn]);
+    
+    createBoard("boardMine", 0);
+    createBoard("boardTarget", 1);
+    setGameListeners();
+    fillTarget();
+    fillMine();
+}
+
+function setGameListeners() {
+    let gameBoard = document.getElementById("boardTarget");
+    gameBoard.addEventListener("click", fire);
+}
+
+function fillMine() {
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            let cell =  $("#" + i + String.fromCharCode(65 + j) + 0);
+            if (boards[turn][i][j] == 1) {
+                cell.css("background", colors[turn]);
+            }
+            else if (boards[turn][i][j] == 2) {
+                cell.css("background", colors[turn]);
+                cell.css("color", colors[1-turn]);
+                cell.html("X")
+            }
+            else if (boards[turn][i][j] == 3) {
+                cell.css("background", "rgba(41, 50, 80, 0.8)");
+                cell.css("color", colors[1-turn]);
+                cell.html("X")
+            }
+            else {
+                cell.css("background", "#f6f8f9");
+                cell.html("");
+            }
+        }
+    }
+}
+
+function fillTarget() {
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            let cell =  $("#" + i + String.fromCharCode(65 + j) + 1);
+            if (boards[1-turn][i][j] == 2) {
+                cell.css("background", colors[1-turn]);
+                cell.css("color", colors[turn]);
+                cell.html("X");
+            }
+            else if (boards[1-turn][i][j] == 3) {
+                cell.css("background", "rgba(41, 50, 80, 0.8)");
+                cell.css("color", colors[turn]);
+                cell.html("X");
+            }
+            else {
+                cell.css("background", "#f6f8f9");
+                cell.html("");
+            }
+        }
+    }
+}
+
+function fire(e) {
+    if (e.target === e.currentTarget)
+        return;
+
+    let row = parseInt(e.target.id.substring(0,1));
+    let col = e.target.id.substring(1,2).charCodeAt(0) - 65;
+    
+    let cellVal = boards[1-turn][row][col];
+    let cell = $(e.target);
+    if (cellVal == 2 || cellVal == 3) {
+        alert("Već je gadjano ovde.");
+        return;
+    }
+    if (cellVal == 1) {
+        cell.css("background", colors[1-turn]); 
+        cell.css("color", colors[turn]);
+        cell.html("X");
+        boards[1-turn][row][col] = 2;
+        hits[turn]++;
+
+        if (hits[turn] == MAX_HITS) {
+            let name = "";
+            if (turn == 0)
+                name = localStorage.getItem("nameF");
+            else 
+                name = localStorage.getItem("nameS");
+
+            setTimeout(() => {
+                alert("Svaka cast, " + name + "!\nPobeda je tvoja.");
+                startOver();
+            })
+        }
+        else { 
+            alert("Svaka cast!")
+        }
+    }
+    else {
+        cell.css("background", "rgba(41, 50, 80, 0.8)");
+        cell.css("color", colors[turn]);
+        cell.html("X");
+        boards[1-turn][row][col] = 3;
+        
+        setTimeout(() => {
+            alert("Pokusaj ponovo");
+            changePlayer();
+        }, 10)
+    }
+}
+
+function changePlayer() {
+    turn = 1 - turn;
+    setName();
+    $(".game").css("background-color", colors[turn]);
+    fillMine();
+    fillTarget();
+}
+
+function startOver() {
+    localStorage.removeItem("nameF");
+    localStorage.removeItem("nameS");
+    localStorage.removeItem("boards");
+
+    window.location.href = "battleship-welcome.html";
+}
