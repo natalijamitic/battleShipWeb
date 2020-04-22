@@ -105,7 +105,7 @@ h1, h3 {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     background: #f7f8f9; 
-    border: 1px solid rgba(16, 20, 31, 0.7);
+    border: 1px solid rgba(41, 50, 80, 0.8);
     width: 50px;
     height: 50px;
 }
@@ -163,7 +163,7 @@ th {
     font-weight: 700;
     text-align: center;
     font-size: 30px;
-    border-radius: 0.15rem;
+    border-radius: 3px;
 }
 
 @media screen and (max-width: 1200px) {

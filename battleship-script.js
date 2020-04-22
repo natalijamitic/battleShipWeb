@@ -328,7 +328,7 @@ function fillMine() {
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
             let cell =  $("#" + i + String.fromCharCode(65 + j) + 0);
-            cell.css("border", "1px solid rgba(41, 50, 80, 0.7)");
+            cell.css("border", "1px solid rgba(41, 50, 80, 1)");
             if (boards[turn][i][j] >= 1 && boards[turn][i][j] <=4) {
                 cell.css("background", colors[turn]);
             }
@@ -338,7 +338,7 @@ function fillMine() {
                 cell.html("X")
             }
             else if (boards[turn][i][j] == 6) {
-                cell.css("background", "rgba(41, 50, 80, 0.8)");
+                cell.css("background", "rgba(41, 50, 80, 1)"); //#222222 DEBATE???
                 cell.css("color", colors[1-turn]);
                 cell.html("X")
             }
@@ -360,14 +360,14 @@ function fillTarget() {
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
             let cell =  $("#" + i + String.fromCharCode(65 + j) + 1);
-            cell.css("border", "1px solid rgba(41, 50, 80, 0.7)");
+            cell.css("border", "1px solid rgba(41, 50, 80, 1)");
             if (boards[1-turn][i][j] == 5) {
                 cell.css("background", colors[1-turn]);
                 cell.css("color", colors[turn]);
                 cell.html("X");
             }
             else if (boards[1-turn][i][j] == 6) {
-                cell.css("background", "rgba(41, 50, 80, 0.8)");
+                cell.css("background", "rgba(41, 50, 80, 1)");
                 cell.css("color", colors[turn]);
                 cell.html("X");
             }
@@ -432,7 +432,7 @@ function fire(e) {
         }
     }
     else {
-        cell.css("background", "rgba(41, 50, 80, 0.8)");
+        cell.css("background", "rgba(41, 50, 80, 1)");
         cell.css("color", colors[turn]);
         cell.html("X");
         boards[1-turn][row][col] = 6;
