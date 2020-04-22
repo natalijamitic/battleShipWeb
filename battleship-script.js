@@ -2,6 +2,8 @@ var rows = 10;
 var cols = 10;
 var squareSize = 50;
 
+var NORMAL_COLOR = "#f7f8f9";
+
 function testInput() {
     let name1 = document.getElementById("firstPlayer");
     let name2 = document.getElementById("secondPlayer");
@@ -112,7 +114,7 @@ function setSetupListeners(boardName) {
 function freeBoard() {
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
-            $("#" + i + String.fromCharCode(65 + j)).css("background", "#f6f8f9");
+            $("#" + i + String.fromCharCode(65 + j)).css("background", NORMAL_COLOR);
         }
     }    
 }
@@ -196,7 +198,7 @@ function finishPlacingShip(e) {
             let row = element.x;
             let col = element.y;
             if (boards[turn][row][col] < 1)
-                $("#" + row + String.fromCharCode(65 + col)).css("background", "#f6f8f9");
+                $("#" + row + String.fromCharCode(65 + col)).css("background", NORMAL_COLOR);
         });
         
     }
@@ -260,7 +262,7 @@ function colorShip(e) {
             let row = element.x;
             let col = element.y;
             if (boards[turn][row][col] < 1)
-                $("#" + row + String.fromCharCode(65 + col)).css("background", "#f6f8f9");
+                $("#" + row + String.fromCharCode(65 + col)).css("background", NORMAL_COLOR);
         });
         start = false;
         positions = [];
@@ -294,6 +296,32 @@ function loadBoards() {
 function setGameListeners() {
     let gameBoard = document.getElementById("boardTarget");
     gameBoard.addEventListener("click", fire);
+    gameBoard.addEventListener("mouseover", highlightCell);
+    gameBoard.addEventListener("mouseout", normalCell);
+}
+
+function highlightCell(e) {
+    if (e.target === e.currentTarget)
+        return;
+
+    let row = parseInt(e.target.id.substring(0,1));
+    let col = e.target.id.substring(1,2).charCodeAt(0) - 65;
+
+    if (boards[1-turn][row][col] < 5) {
+        $(e.target).css("background", "#dddfe0")
+    } 
+}
+
+function normalCell(e) {
+    if (e.target === e.currentTarget)
+        return;
+
+    let row = parseInt(e.target.id.substring(0,1));
+    let col = e.target.id.substring(1,2).charCodeAt(0) - 65;
+
+    if (boards[1-turn][row][col] < 5) {
+        $(e.target).css("background", NORMAL_COLOR)
+    } 
 }
 
 function fillMine() {
@@ -321,7 +349,7 @@ function fillMine() {
                 cell.html("X");
             }
             else if (boards[turn][i][j] < 1) {
-                cell.css("background", "#f6f8f9");
+                cell.css("background", NORMAL_COLOR);
                 cell.html("");
             }
         }
@@ -350,7 +378,7 @@ function fillTarget() {
                 cell.html("X");
             }
             else {
-                cell.css("background", "#f6f8f9");
+                cell.css("background", NORMAL_COLOR);
                 cell.html("");
             }
         }
