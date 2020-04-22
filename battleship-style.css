@@ -1,0 +1,80 @@
+h1, h3 {
+    color: #293250;
+}
+
+.first, .second {
+    height: 50vh;
+    width: 100%;
+}
+
+.first {
+    float: left;
+    background-color: #6DD47E;
+}
+
+.second {
+    float: right;
+    background-color: #FFD55A;
+}
+
+/*
+.centered {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    text-align: center;
+}
+*/
+
+.newGame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-40%, -55%);
+}
+
+.btn-lg {
+    background-color: #293250;
+    color: white;
+    border-color: #293250;
+    font-weight: 500;
+}
+
+.logo {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -15%);
+    z-index: 1;
+}
+
+.logo img {
+    background: transparent;
+    border-radius: 3rem;
+    width: 25%;
+    padding: 4%;
+}
+
+.form-control {
+    border-radius: 0.75rem;
+    width: 120%;
+}
+
+@media screen and (min-width: 768px) {
+    .first, .second {
+        height: 100vh;
+    }
+
+    .newGame {
+        top: 65%;
+        left: 50%;
+        transform: translate(-40%, -70%);
+    }
+
+    .logo {
+        top: 80%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+    }
+}
