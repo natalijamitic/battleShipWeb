@@ -58,6 +58,8 @@ var boards =[
 var start = false;
 var finish = false;
 var positions = [];
+var shipPositions = [[["placeholder"], [], [], [], []],[["placeholder"], [], [], [], []] ];
+var shipsLeft = [10, 10];
 
 function fillSetupFirst() {
     $(".setup").css("background-color", colors[turn]);
@@ -193,7 +195,7 @@ function finishPlacingShip(e) {
         positions.forEach(element => {
             let row = element.x;
             let col = element.y;
-            if (boards[turn][row][col] != 1)
+            if (boards[turn][row][col] < 1)
                 $("#" + row + String.fromCharCode(65 + col)).css("background", "#f6f8f9");
         });
         
@@ -215,11 +217,15 @@ function finishPlacingShip(e) {
 
         });
 
+        var tempArray = []
         positions.forEach(element => {
             let row = element.x;
             let col = element.y;
-            boards[turn][row][col] = 1;
+            boards[turn][row][col] = positions.length;
+
+            tempArray.push({x: row, y: col, hit: 0});
         })
+        shipPositions[turn][positions.length].push(tempArray);
     }
 
     start = false;
@@ -233,6 +239,7 @@ function finishPlacingShip(e) {
     }
     else if (finish && turn == 1) {
         localStorage.setItem("boards", JSON.stringify(boards));
+        localStorage.setItem("shipPositions", JSON.stringify(shipPositions));
         window.location.href = "battleship-game.html";
     }
 }
@@ -252,7 +259,7 @@ function colorShip(e) {
         positions.forEach(element => {
             let row = element.x;
             let col = element.y;
-            if (boards[turn][row][col] != 1)
+            if (boards[turn][row][col] < 1)
                 $("#" + row + String.fromCharCode(65 + col)).css("background", "#f6f8f9");
         });
         start = false;
@@ -271,6 +278,7 @@ var first = true;
 
 function loadBoards() {
     boards = JSON.parse(localStorage.getItem("boards"));
+    shipPositions = JSON.parse(localStorage.getItem("shipPositions"));
 
     setName();
 
@@ -292,20 +300,27 @@ function fillMine() {
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
             let cell =  $("#" + i + String.fromCharCode(65 + j) + 0);
-            if (boards[turn][i][j] == 1) {
+            cell.css("border", "1px solid rgba(41, 50, 80, 0.7)");
+            if (boards[turn][i][j] >= 1 && boards[turn][i][j] <=4) {
                 cell.css("background", colors[turn]);
             }
-            else if (boards[turn][i][j] == 2) {
+            else if (boards[turn][i][j] == 5) {
                 cell.css("background", colors[turn]);
                 cell.css("color", colors[1-turn]);
                 cell.html("X")
             }
-            else if (boards[turn][i][j] == 3) {
+            else if (boards[turn][i][j] == 6) {
                 cell.css("background", "rgba(41, 50, 80, 0.8)");
                 cell.css("color", colors[1-turn]);
                 cell.html("X")
             }
-            else {
+            else if (boards[turn][i][j] == 7) {
+                cell.css("border", "2px solid red");
+                cell.css("background", colors[turn]);
+                cell.css("color", colors[1-turn]);
+                cell.html("X");
+            }
+            else if (boards[turn][i][j] < 1) {
                 cell.css("background", "#f6f8f9");
                 cell.html("");
             }
@@ -317,13 +332,20 @@ function fillTarget() {
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
             let cell =  $("#" + i + String.fromCharCode(65 + j) + 1);
-            if (boards[1-turn][i][j] == 2) {
+            cell.css("border", "1px solid rgba(41, 50, 80, 0.7)");
+            if (boards[1-turn][i][j] == 5) {
                 cell.css("background", colors[1-turn]);
                 cell.css("color", colors[turn]);
                 cell.html("X");
             }
-            else if (boards[1-turn][i][j] == 3) {
+            else if (boards[1-turn][i][j] == 6) {
                 cell.css("background", "rgba(41, 50, 80, 0.8)");
+                cell.css("color", colors[turn]);
+                cell.html("X");
+            }
+            else if (boards[1-turn][i][j] == 7) {
+                cell.css("border", "2px solid red");
+                cell.css("background", colors[1-turn]);
                 cell.css("color", colors[turn]);
                 cell.html("X");
             }
@@ -344,16 +366,18 @@ function fire(e) {
     
     let cellVal = boards[1-turn][row][col];
     let cell = $(e.target);
-    if (cellVal == 2 || cellVal == 3) {
+    if (cellVal == 5 || cellVal == 6) {
         alert("Već je gadjano ovde.");
         return;
     }
-    if (cellVal == 1) {
+    if (cellVal >= 1 && cellVal <= 4) {
         cell.css("background", colors[1-turn]); 
         cell.css("color", colors[turn]);
         cell.html("X");
-        boards[1-turn][row][col] = 2;
+        boards[1-turn][row][col] = 5;
         hits[turn]++;
+
+        let wholeShip = checkSink(row, col, cellVal);
 
         if (hits[turn] == MAX_HITS) {
             let name = "";
@@ -363,27 +387,32 @@ function fire(e) {
                 name = localStorage.getItem("nameS");
 
             setTimeout(() => {
-                alert("Svaka cast, " + name + "!\nPobeda je tvoja.");
+                alert("Svaka cast, " + name + "!\nPobeda je tvoja.\nOstalo ti je " + shipsLeft[turn] + " nepotopljenih brodova");
                 startOver();
-            })
+            }, 10)
+        }
+        else if (wholeShip) {
+            setTimeout(() => {
+                shipsLeft[1-turn]--;
+                alert("Svaka cast, brod je potopljen!");
+            }, 10)
         }
         else { 
             setTimeout(() => {
-                alert("Svaka cast!");
-                ;
-            }, 10)
+                alert("Svaka cast, brod je pogodjen!");
+            }, 100)
         }
     }
     else {
         cell.css("background", "rgba(41, 50, 80, 0.8)");
         cell.css("color", colors[turn]);
         cell.html("X");
-        boards[1-turn][row][col] = 3;
+        boards[1-turn][row][col] = 6;
         
         setTimeout(() => {
             alert("Pokusaj ponovo");
             changePlayer();
-        }, 10)
+        }, 100)
     }
 }
 
@@ -399,6 +428,43 @@ function startOver() {
     localStorage.removeItem("nameF");
     localStorage.removeItem("nameS");
     localStorage.removeItem("boards");
+    localStorage.removeItem("shipPositions");
 
     window.location.href = "battleship-welcome.html";
+}
+
+function checkSink(row, col, cellVal) {
+    let myI = -1;
+    let bSink = true;
+    for (i = 0; i < shipPositions[1-turn][cellVal].length; i++) {
+        for (j = 0; j < shipPositions[1-turn][cellVal][i].length; j++) {
+            if (shipPositions[1-turn][cellVal][i][j].x == row && shipPositions[1-turn][cellVal][i][j].y == col) {
+                shipPositions[1-turn][cellVal][i][j].hit = 1;
+                myI = i;
+                break;
+            }
+        }
+        if (myI != -1) {
+            break;
+        }
+    }
+
+    if (myI != -1) {
+        for (k = 0; k < shipPositions[1-turn][cellVal][i].length; k++) {
+            if (shipPositions[1-turn][cellVal][i][k].hit == 0) {
+                bSink = false;
+            }
+        }
+    }
+
+    if (bSink) {
+        for (k = 0; k < shipPositions[1-turn][cellVal][i].length; k++) {
+            let x = shipPositions[1-turn][cellVal][i][k].x;
+            let y = shipPositions[1-turn][cellVal][i][k].y;
+            let cell =  $("#" + x + String.fromCharCode(65 + y) + 1);
+            cell.css("border", "2px solid red");
+            boards[1-turn][x][y] = 7;
+        }
+    }
+    return bSink;
 }
