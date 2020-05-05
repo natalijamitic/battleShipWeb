@@ -1,3 +1,7 @@
+html {
+    overflow: scroll;
+}
+
 h1, h3 {
     color: #293250;
 }
@@ -90,13 +94,43 @@ h1, h3 {
     width: 100%;
 }
 
+#indexBoard {
+    margin: 0 auto 2em auto;
+    width: 100%;
+    overflow: scroll;
+}
+
+#boardCol {
+    margin: 0 auto 2em auto;
+    width: 560px;
+    max-width: inherit;
+}
+
+#indexesRow {
+    position: relative;
+    margin: 0 auto 0 auto;
+    width: 506px;
+    height: 50px;
+    max-width: inherit;
+}
+
+#indexesCol {
+    position: relative;
+    width: 50px;
+    height: 506px;
+    float: left;
+}
+
 #board {
     position: relative;
-    margin: 0 auto 2em auto;
+    /* margin: 0 auto 2em auto; */
+    /* margin-right: 50px;  */
     width: 506px;
     height: 506px;
     border: 3px solid #293250;
     cursor: cell;
+    float:right;
+    margin-bottom: 4em;
 }
 
 #board div{
@@ -108,31 +142,45 @@ h1, h3 {
     border: 1px solid rgba(41, 50, 80, 0.8);
     width: 50px;
     height: 50px;
+    border-radius: 3px;
 }
 
 td {
     color: #293250;
+    font-weight: 600 !important;
 }
 
 th {
     color: white;
     background-color: #293250 !important;
+    
 }
 
 .caption {
     color: white;
+    text-shadow: 1.5px 1.5px #293250;
 }
 
-/*
-@media screen and (max-width: 650px) {
-    #board {
-        width: 253px;
-        height: 253px;
-    }
-    
-    #board div {
-        width: 25px;
-        height: 25px;
+#indexBoard div.index.centerRow {
+    padding-left: 49px;
+    padding-top: 10px;
+}
+
+#indexBoard div.index {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    font-weight: 600;
+    color: #293250;
+    font-size: 20px;
+    padding-top: 9px;
+    overflow: auto;
+    padding-left: 23px;
+}
+
+@media screen and (max-width: 767px) {
+    #indexBoard div.index.centerRow {
+        padding-left: 75px;
     }
 }
 
@@ -166,6 +214,51 @@ th {
     border-radius: 3px;
 }
 
+
+#indexBoard1, #indexBoard2 {
+    margin: 0 auto 2em auto;
+    width: 100%;
+    overflow: scroll;
+}
+
+#boardCol1, #boardCol2 {
+    margin: 0 auto 2em auto;
+    width: 560px;
+    max-width: inherit;
+}
+
+#indexesRow1, #indexesRow2 {
+    position: relative;
+    margin: 0 auto 0 auto;
+    width: 506px;
+    height: 50px;
+    max-width: inherit;
+}
+
+#indexesCol1, #indexesCol2 {
+    position: relative;
+    width: 50px;
+    height: 506px;
+    float: left;
+}
+
+#indexBoard1 div.index.centerRow, #indexBoard2 div.index.centerRow {
+    padding-left: 49px;
+    padding-top: 10px;
+}
+
+#indexBoard1 div.index, #indexBoard2 div.index {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    font-weight: 600;
+    color: #293250;
+    font-size: 20px;
+    padding-top: 9px;
+    overflow: auto;
+    padding-left: 23px;
+}
+
 @media screen and (max-width: 1200px) {
     #boardMine, #boardTarget {
         position: relative;
@@ -179,3 +272,52 @@ th {
         margin-top: 2em;
     }
 }
+
+@media screen and (max-width: 1199px) {
+    #indexBoard1 div.index.centerRow, #indexBoard2 div.index.centerRow {
+        padding-left: 23px;
+    }
+    #indexBoard1 div.index, #indexBoard2 div.index {
+        
+        padding-left: 0px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #indexBoard1 div.index.centerRow, #indexBoard2 div.index.centerRow {
+        padding-left: 33px;
+    }
+}
+
+
+@media screen and (max-width: 575px) {
+    #indexBoard1 div.index.centerRow, #indexBoard2 div.index.centerRow {
+        padding-left: 23px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    #indexBoard1 div.index.centerRow, #indexBoard2 div.index.centerRow {
+        padding-left: 31px;
+    }
+}
+
+@media screen and (max-width: 537px) {
+    #indexBoard1 div.index.centerRow, #indexBoard2 div.index.centerRow {
+        padding-left: 39px;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    #indexBoard1 div.index.centerRow, #indexBoard2 div.index.centerRow {
+        padding-left: 44px;
+    }
+}
+
+
+@media screen and (max-width: 512px) {
+    #indexBoard1 div.index.centerRow, #indexBoard2 div.index.centerRow {
+        padding-left: 49px;
+    }
+}
+

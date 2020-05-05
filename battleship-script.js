@@ -4,6 +4,13 @@ var squareSize = 50;
 
 var NORMAL_COLOR = "#f7f8f9";
 
+function welcome() {
+    localStorage.removeItem("nameF");
+    localStorage.removeItem("nameS");
+    localStorage.removeItem("boards");
+    localStorage.removeItem("shipPositions");
+}
+
 function testInput() {
     let name1 = document.getElementById("firstPlayer");
     let name2 = document.getElementById("secondPlayer");
@@ -64,11 +71,20 @@ var shipPositions = [[["placeholder"], [], [], [], []],[["placeholder"], [], [],
 var shipsLeft = [10, 10];
 
 function fillSetupFirst() {
+    localStorage.removeItem("boards");
+    localStorage.removeItem("shipPositions");
+
+    if(localStorage.getItem("nameF") == null) {
+        window.location.href = "battleship-welcome.html";
+        return;
+    }
+
     $(".setup").css("background-color", colors[turn]);
 
     setName();
     
     if (turn == 0) {
+        createIndexes("indexesRow", "indexesCol");
         createBoard("board");
         setSetupListeners("board");
     }
@@ -87,18 +103,53 @@ function setName() {
     $("#playerName").html(localStorage.getItem(name));
 }
 
+function createIndexes(Row, Col) {
+    let indexesRow = document.getElementById(Row);
+
+    for (i = 0; i < rows; i++) {
+        let square = document.createElement("div");
+        indexesRow.appendChild(square);
+        square.classList.add("index");
+        square.classList.add("centerRow");
+        square.innerHTML = String.fromCharCode(65+i);
+        square.style.top = (0 * squareSize) + "px";
+        square.style.left = (i * squareSize) + "px";
+    }
+
+    let indexesCol = document.getElementById(Col);
+
+    for (i = 0; i < cols; i++) {
+        let square = document.createElement("div");
+        indexesCol.appendChild(square);
+        square.classList.add("index");
+        square.innerHTML = i + 1;
+        square.style.top = (i * squareSize) + "px";
+        square.style.left = (0 * squareSize) + "px";
+    }
+    // for (j = 0; j < cols; j++) {
+    //     let square = document.createElement("div");
+    //     gameBoard.appendChild(square);
+    //     square.classList.add("index");
+    //     square.innerHTML = j + 1;
+    //     square.style.top = (j * squareSize) + "px";
+    //     square.style.left = (0 * squareSize) + "px";
+    // }
+}
+
 function createBoard(boardName, turn = -1) {
     let gameBoard = document.getElementById(boardName);
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
+            
             let square = document.createElement("div");
             gameBoard.appendChild(square);
+            square.style.top = (j * squareSize) + "px";
+            square.style.left = (i * squareSize) + "px";
             square.id = (j) + String.fromCharCode(65+i);
             if (turn !== -1) {
                 square.id += turn;
             }
-            square.style.top = (j * squareSize) + "px";
-            square.style.left = (i * squareSize) + "px";
+            
         }
     }
 }
@@ -279,6 +330,11 @@ var hits = [0, 0];
 var first = true;
 
 function loadBoards() {
+    if(localStorage.getItem("boards") == null){
+        window.location.href = (localStorage.getItem("nameF") == null) ? "battleship-welcome.html" : "battleship-setup.html";
+        return;
+    }
+
     boards = JSON.parse(localStorage.getItem("boards"));
     shipPositions = JSON.parse(localStorage.getItem("shipPositions"));
 
@@ -286,6 +342,9 @@ function loadBoards() {
 
     $(".game").css("background-color", colors[turn]);
     
+    createIndexes("indexesRow1", "indexesCol1");
+    createIndexes("indexesRow2", "indexesCol2");
+
     createBoard("boardMine", 0);
     createBoard("boardTarget", 1);
     setGameListeners();

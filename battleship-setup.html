@@ -32,13 +32,22 @@
 
         <div class="col-12 no-gutters">
             <div class="full text-center">
-                <h1 class="pt-5">Ćao, <span id="playerName"></span>!</h1>
-                <h3>Postavi svoje brodove:</h3>
+                    <h1 class="pt-5">Ćao, <span id="playerName"></span>!</h1>
+                    <h3>Postavi svoje brodove:</h3>
+                
                 <br>
                 <br>
                 <div class="container">
-                    <div id="board"></div>
-                    <br>
+                    <div class="col-12 mt-3 mb-5">
+                        <div id="indexBoard">
+                            <div id="indexesRow"></div>
+                            <div id="boardCol">
+                                <div id="indexesCol"></div>
+                                <div id="board"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <br>
                     <div class="table-responsive-md">
                         <table class="table table-sm table-borderless">
@@ -46,30 +55,30 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Naziv</th>
-                                    <th>Preostalo</th>
                                     <th>Veličina</th>
+                                    <th>Preostalo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>Podmornica</td>
-                                    <td id="ship1">4</td>
                                     <td>1</td>
+                                    <td id="ship1">4</td>
                                 </tr>
                                 <tr>
                                     <td>Uništiteljski brod</td>
-                                    <td id="ship2">3</td>
                                     <td>2</td>
+                                    <td id="ship2">3</td>
                                 </tr>
                                 <tr>
                                     <td>Običan brod</td>
-                                    <td id="ship3">2</td>
                                     <td>3</td>
+                                    <td id="ship3">2</td>
                                 </tr>
                                 <tr>
                                     <td>Ratni brod</td>
-                                    <td id="ship4">1</td>
                                     <td>4</td>
+                                    <td id="ship4">1</td>
                                 </tr>
                             </tbody>
                             
