@@ -160,6 +160,14 @@ function setSetupListeners(boardName) {
     gameBoard.addEventListener("mouseup", finishPlacingShip);
     gameBoard.addEventListener("mouseover", colorShip);
     gameBoard.addEventListener("contextmenu", nothing);
+
+    document.getElementById("indexBoard").addEventListener("mouseover", exit);
+}
+
+function exit() {
+    if (start) {
+        finishPlacingShip(false);
+    }
 }
 
 function freeBoard() {
@@ -201,10 +209,21 @@ function startPlacingShip(e) {
 }
 
 function finishPlacingShip(e) {
+    if (e == false) {
+        positions.forEach(element => {
+            let row = element.x;
+            let col = element.y;
+            if (boards[turn][row][col] < 1)
+                $("#" + row + String.fromCharCode(65 + col)).css("background", NORMAL_COLOR);
+        });
+    }
+
     if (!start)
         return;
     
     let bOk = true;
+
+    positions = removeDuplicates(positions);
 
     if (e.target === e.currentTarget) {
         bOk = false;
@@ -215,6 +234,9 @@ function finishPlacingShip(e) {
     else if (ships[positions.length] == 0) {
         bOk = false;
     }
+    // else if (hasDuplicates(positions)) {
+    //     bOk = false;
+    // }
     else {
         let sameRow = true;
         let sameCol = true;
@@ -307,6 +329,7 @@ function colorShip(e) {
             positions.push(position)
             e.target.style.background = colors[turn];
         }
+        e.stopPropagation();
     }
     else {
         positions.forEach(element => {
@@ -322,6 +345,23 @@ function colorShip(e) {
 }
 
 
+function removeDuplicates(array) {
+    return array.filter((position, index, self) =>
+                index === self.findIndex((t) => (
+                    t.x === position.x && t.y === position.y
+                ))
+            )
+    // for (i = 0; i < array.length; i++) {
+    //     x = array[i].x
+    //     y = array[i].y
+    //     for (j = i + 1; j < array.length; j++) {
+    //         if (x == array[j].x && y == array[j].y)
+    //             return true;
+
+    //     }
+    // }
+    // return false;
+}
 
 /******* GAME *******/
 
@@ -358,6 +398,8 @@ function setGameListeners() {
     gameBoard.addEventListener("mouseover", highlightCell);
     gameBoard.addEventListener("mouseout", normalCell);
 }
+
+
 
 function highlightCell(e) {
     if (e.target === e.currentTarget)
