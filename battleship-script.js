@@ -126,21 +126,12 @@ function createIndexes(Row, Col) {
         square.style.top = (i * squareSize) + "px";
         square.style.left = (0 * squareSize) + "px";
     }
-    // for (j = 0; j < cols; j++) {
-    //     let square = document.createElement("div");
-    //     gameBoard.appendChild(square);
-    //     square.classList.add("index");
-    //     square.innerHTML = j + 1;
-    //     square.style.top = (j * squareSize) + "px";
-    //     square.style.left = (0 * squareSize) + "px";
-    // }
 }
 
 function createBoard(boardName, turn = -1) {
     let gameBoard = document.getElementById(boardName);
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
-            
             let square = document.createElement("div");
             gameBoard.appendChild(square);
             square.style.top = (j * squareSize) + "px";
@@ -149,7 +140,6 @@ function createBoard(boardName, turn = -1) {
             if (turn !== -1) {
                 square.id += turn;
             }
-            
         }
     }
 }
@@ -234,9 +224,9 @@ function finishPlacingShip(e) {
     else if (ships[positions.length] == 0) {
         bOk = false;
     }
-    // else if (hasDuplicates(positions)) {
-    //     bOk = false;
-    // }
+    else if (maxDifferenceGt1()) {
+    	bOk = false;
+    }
     else {
         let sameRow = true;
         let sameCol = true;
@@ -347,21 +337,27 @@ function colorShip(e) {
 
 function removeDuplicates(array) {
     return array.filter((position, index, self) =>
-                index === self.findIndex((t) => (
-                    t.x === position.x && t.y === position.y
-                ))
-            )
-    // for (i = 0; i < array.length; i++) {
-    //     x = array[i].x
-    //     y = array[i].y
-    //     for (j = i + 1; j < array.length; j++) {
-    //         if (x == array[j].x && y == array[j].y)
-    //             return true;
-
-    //     }
-    // }
-    // return false;
+			                index === self.findIndex((t) => (
+			                    t.x === position.x && t.y === position.y
+			                ))
+			            )
 }
+
+function maxDifferenceGt1() {
+	let x = positions[0].x;
+	let y = positions[0].y
+	for (let i = 1; i < positions.length; i++) {
+		if (Math.abs(positions[i].x-x) > 1)
+			return true;
+		if (Math.abs(positions[i].y-y) > 1)
+			return true;
+
+		x = positions[i].x;
+		y = positions[i].y
+	}
+	return false;
+}
+
 
 /******* GAME *******/
 
@@ -398,8 +394,6 @@ function setGameListeners() {
     gameBoard.addEventListener("mouseover", highlightCell);
     gameBoard.addEventListener("mouseout", normalCell);
 }
-
-
 
 function highlightCell(e) {
     if (e.target === e.currentTarget)
